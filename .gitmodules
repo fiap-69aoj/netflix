@@ -1,0 +1,9 @@
+[submodule "netflix-discovery-server"]
+	path = netflix-discovery-server
+	url = https://github.com/fiap-69aoj/netflix-discovery-server.git
+[submodule "netflix-user"]
+	path = netflix-user
+	url = https://github.com/fiap-69aoj/netflix-user.git
+[submodule "netflix-gateway"]
+	path = netflix-gateway
+	url = https://github.com/fiap-69aoj/netflix-gateway.git

@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  zipkin:
+    image: openzipkin/zipkin
+    ports:
+      - "9411:9411"
+    networks:
+      - custom_net
+
+  discovery-server:
+    image: ./netflix-discovery-server/
+    ports:
+      -"8761:8761"
+    networks:
+      - custom_net
+
+networks:
+  custom_net:
+    driver: bridge
