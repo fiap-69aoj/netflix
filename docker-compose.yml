@@ -9,9 +9,11 @@ services:
       - custom_net
 
   discovery-server:
-    image: ./netflix-discovery-server/
+    build: 
+      context: ./netflix-discovery-server/
+      dockerfile: ./Dockerfile
     ports:
-      -"8761:8761"
+      - "8761:8761"
     networks:
       - custom_net
 
