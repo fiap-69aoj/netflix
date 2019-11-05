@@ -6,24 +6,43 @@
 
 git submodule update --recursive --remote
 
-# Discovery Server
+---
+
+## Build projetos
+
+### Discovery Server
 
 cd netflix-discovery-server
 
 Build Project
 mvn package
 
-# Gateway
+### Gateway
 
 cd netflix-gateway
 
 Build Project
 mvn package
 
-# User
+### User
 
 cd netflix-user
 
 Build Project
 mvn package
 
+---
+
+## Deploy
+
+Iniciando:
+
+```
+sudo docker-compose up -d --build
+```
+
+Parando:
+
+```
+sudo docker-compose down
+```
