@@ -17,6 +17,25 @@ services:
     networks:
       - custom_net
 
+  gateway:
+    build: 
+      context: ./netflix-gateway/
+      dockerfile: ./Dockerfile
+    ports:
+      - "8091:8091"
+    networks:
+      - custom_net
+
+  user:
+    build: 
+      context: ./netflix-user/
+      dockerfile: ./Dockerfile
+    ports:
+      - "8090:8090"
+    networks:
+      - custom_net
+
+
 networks:
   custom_net:
     driver: bridge
