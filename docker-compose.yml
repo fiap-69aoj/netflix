@@ -1,7 +1,22 @@
 version: '3'
 
 services:
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:latest
+    ports:
+    - 9090:9090
+    command:
+    - --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+    - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    depends_on:
+    - user
+    - gateway
+
   zipkin:
+    container_name: zipkin
     image: openzipkin/zipkin
     ports:
       - "9411:9411"
@@ -9,6 +24,7 @@ services:
       - custom_net
 
   discovery-server:
+    container_name: discovery-server
     build: 
       context: ./netflix-discovery-server/
       dockerfile: ./Dockerfile
@@ -23,6 +39,7 @@ services:
       retries: 5
 
   user:
+    container_name: user
     build: 
       context: ./netflix-user/
       dockerfile: ./Dockerfile
@@ -39,6 +56,7 @@ services:
       - discovery-server
 
   gateway:
+    container_name: gateway
     build: 
       context: ./netflix-gateway/
       dockerfile: ./Dockerfile
