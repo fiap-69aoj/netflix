@@ -4,7 +4,9 @@
 
 ## Atualizando submodules
 
+```
 git submodule update --recursive --remote
+```
 
 ---
 
@@ -35,14 +37,20 @@ mvn package
 
 ## Deploy
 
-Iniciando:
+Iniciando aplicações:
 
 ```
 sudo docker-compose up -d --build
 ```
 
-Parando:
+Parando aplicações:
 
 ```
 sudo docker-compose down
+```
+
+Visualizando logs:
+
+```
+sudo docker-compose logs -f
 ```
