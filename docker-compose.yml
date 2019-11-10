@@ -2,6 +2,19 @@ version: '3'
 
 services:
 
+  kafka:
+    container_name: kafka
+    build: 
+      context: ./kafka/
+      dockerfile: ./Dockerfile
+    ports:
+      - "2181:2181"
+      - "9092:9092"
+    networks:
+      - custom_net
+    environment:
+      - ADVERTISED_HOST=localhost
+
   prometheus:
     container_name: prometheus
     image: prom/prometheus:latest
@@ -42,6 +55,23 @@ services:
     container_name: user
     build: 
       context: ./netflix-user/
+      dockerfile: ./Dockerfile
+    ports:
+      - "8090:8090"
+    networks:
+      - custom_net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8090/actuator/health"]
+      interval: 1m
+      timeout: 10s
+      retries: 5
+    depends_on:
+      - discovery-server
+
+  order:
+    container_name: order
+    build: 
+      context: ./netflix-order/
       dockerfile: ./Dockerfile
     ports:
       - "8090:8090"
