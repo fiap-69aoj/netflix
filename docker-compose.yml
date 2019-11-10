@@ -74,11 +74,11 @@ services:
       context: ./netflix-order/
       dockerfile: ./Dockerfile
     ports:
-      - "8090:8090"
+      - "8092:8092"
     networks:
       - custom_net
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8090/actuator/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8092/actuator/health"]
       interval: 1m
       timeout: 10s
       retries: 5
@@ -97,6 +97,7 @@ services:
     depends_on:
       - discovery-server
       - user
+      - order
 
 networks:
   custom_net:
