@@ -54,3 +54,19 @@ Visualizando logs:
 ```
 sudo docker-compose logs -f
 ```
+
+---
+
+## Iniciar Infra (kafka, zipkin e discovery)
+
+Iniciando aplicações:
+
+```
+sudo docker-compose -f docker-compose-infra.yml up -d --build
+```
+
+Parando aplicações:
+
+```
+sudo docker-compose down
+```
