@@ -10,3 +10,6 @@
 [submodule "netflix-order"]
 	path = netflix-order
 	url = https://github.com/fiap-69aoj/netflix-order.git
+[submodule "netflix-catalog"]
+	path = netflix-catalog
+	url = https://github.com/fiap-69aoj/netflix-catalog.git
