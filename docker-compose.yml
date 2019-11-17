@@ -2,8 +2,19 @@ version: '3'
 
 services:
 
-  kafka:
-    container_name: kafka
+  netflix-mysql:
+    container_name: netflix-mysql
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    networks:
+      - netflix-custom-network
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=netflix-catalog
+
+  netflix-kafka:
+    container_name: netflix-kafka
     build: 
       context: ./kafka/
       dockerfile: ./Dockerfile
@@ -11,12 +22,12 @@ services:
       - "2181:2181"
       - "9092:9092"
     networks:
-      - custom_net
+      - netflix-custom-network
     environment:
       - ADVERTISED_HOST=localhost
 
-  prometheus:
-    container_name: prometheus
+  netflix-prometheus:
+    container_name: netflix-prometheus
     image: prom/prometheus:latest
     ports:
     - 9090:9090
@@ -28,77 +39,99 @@ services:
     - user
     - gateway
 
-  zipkin:
-    container_name: zipkin
+  netflix-zipkin:
+    container_name: netflix-zipkin
     image: openzipkin/zipkin
     ports:
       - "9411:9411"
     networks:
-      - custom_net
+      - netflix-custom-network
 
-  discovery-server:
-    container_name: discovery-server
+  netflix-configuration-server:
+    container_name: netflix-configuration-server
+    build: 
+      context: ./netflix-configuration-server/
+      dockerfile: ./Dockerfile
+    ports:
+      - "9092:9092"
+    networks:
+      - netflix-custom-network
+
+  netflix-discovery-server:
+    container_name: netflix-discovery-server
     build: 
       context: ./netflix-discovery-server/
       dockerfile: ./Dockerfile
     ports:
       - "8761:8761"
     networks:
-      - custom_net
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
-      interval: 1m
-      timeout: 10s
-      retries: 5
+      - netflix-custom-network
 
-  user:
-    container_name: user
+  netflix-catalog:
+    container_name: netflix-catalog
+    build: 
+      context: ./netflix-catalog/
+      dockerfile: ./Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - netflix-custom-network
+    depends_on:
+      - netflix-discovery-server
+      - netflix-mysql
+
+  netflix-help-desk:
+    container_name: netflix-help-desk
+    build: 
+      context: ./netflix-help-desk/
+      dockerfile: ./Dockerfile
+    ports:
+      - "8081:8081"
+    networks:
+      - netflix-custom-network
+    depends_on:
+      - netflix-discovery-server
+
+  netflix-user:
+    container_name: netflix-user
     build: 
       context: ./netflix-user/
       dockerfile: ./Dockerfile
     ports:
-      - "8090:8090"
+      - "8082:8082"
     networks:
-      - custom_net
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8090/actuator/health"]
-      interval: 1m
-      timeout: 10s
-      retries: 5
+      - netflix-custom-network
     depends_on:
-      - discovery-server
+      - netflix-discovery-server
 
-  order:
-    container_name: order
+  netflix-order:
+    container_name: netflix-order
     build: 
       context: ./netflix-order/
       dockerfile: ./Dockerfile
     ports:
-      - "8092:8092"
+      - "8083:8083"
     networks:
-      - custom_net
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8092/actuator/health"]
-      interval: 1m
-      timeout: 10s
-      retries: 5
+      - netflix-custom-network
     depends_on:
-      - discovery-server
+      - netflix-discovery-server
 
-  gateway:
-    container_name: gateway
+  netflix-gateway:
+    container_name: netflix-gateway
     build: 
       context: ./netflix-gateway/
       dockerfile: ./Dockerfile
     ports:
-      - "8091:8091"
+      - "9091:9091"
     networks:
-      - custom_net
+      - netflix-custom-network
     depends_on:
-      - discovery-server
-      - user
-      - order
+      - netflix-discovery-server
+      - netflix-catalog
+      - netflix-help-desk
+      - netflix-user
+      - netflix-order
 
 networks:
-  custom_net:
+  netflix-custom-network:
     driver: bridge

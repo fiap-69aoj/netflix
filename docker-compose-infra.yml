@@ -2,8 +2,19 @@ version: '3'
 
 services:
 
-  kafka:
-    container_name: kafka
+  netflix-mysql:
+    container_name: netflix-mysql
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    networks:
+      - netflix-custom-network
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=netflix-catalog
+
+  netflix-kafka:
+    container_name: netflix-kafka
     build: 
       context: ./kafka/
       dockerfile: ./Dockerfile
@@ -11,33 +22,38 @@ services:
       - "2181:2181"
       - "9092:9092"
     networks:
-      - custom_net
+      - netflix-custom-network
     environment:
       - ADVERTISED_HOST=localhost
 
-  zipkin:
-    container_name: zipkin
+  netflix-configuration-server:
+    container_name: netflix-configuration-server
+    build: 
+      context: ./netflix-configuration-server/
+      dockerfile: ./Dockerfile
+    ports:
+      - "9092:9092"
+    networks:
+      - netflix-custom-network
+      
+  netflix-zipkin:
+    container_name: netflix-zipkin
     image: openzipkin/zipkin
     ports:
       - "9411:9411"
     networks:
-      - custom_net
+      - netflix-custom-network
 
-  discovery-server:
-    container_name: discovery-server
+  netflix-discovery-server:
+    container_name: netflix-discovery-server
     build: 
       context: ./netflix-discovery-server/
       dockerfile: ./Dockerfile
     ports:
       - "8761:8761"
     networks:
-      - custom_net
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
-      interval: 1m
-      timeout: 10s
-      retries: 5
+      - netflix-custom-network
 
 networks:
-  custom_net:
+  netflix-custom-network:
     driver: bridge

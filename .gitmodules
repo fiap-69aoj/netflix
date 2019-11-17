@@ -10,3 +10,15 @@
 [submodule "netflix-order"]
 	path = netflix-order
 	url = https://github.com/fiap-69aoj/netflix-order.git
+[submodule "netflix-configuration-server"]
+	path = netflix-configuration-server
+	url = https://github.com/fiap-69aoj/netflix-configuration-server.git
+[submodule "netflix-commons"]
+	path = netflix-commons
+	url = https://github.com/fiap-69aoj/netflix-commons.git
+[submodule "netflix-help-desk"]
+	path = netflix-help-desk
+	url = https://github.com/fiap-69aoj/netflix-help-desk.git
+[submodule "netflix-catalog"]
+	path = netflix-catalog
+	url = https://github.com/fiap-69aoj/netflix-catalog.git
