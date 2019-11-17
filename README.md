@@ -12,7 +12,7 @@ netflix-prometheus:9090
 netflix-zipkin:9411
 netflix-discovery-server:8761
 netflix-gateway:9091
-netflix-configuration-server:9092
+netflix-configuration-server:9093
 
 netflix-catalog:8080
 netflix-help-desk:8081

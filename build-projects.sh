@@ -4,12 +4,16 @@ WORKDIR=$(pwd)
 
 echo $WORKDIR
 
-echo "Building netflix-gateway"
+echo "Building Configuration Server"
+cd $WORKDIR/netflix-configuration-server
+mvn package
+
+echo "Building Gateway"
 cd $WORKDIR/netflix-gateway
 mvn package
 
-echo "Building netflix-gateway"
-cd $WORKDIR/netflix-gateway
+echo "Building Discovery"
+cd $WORKDIR/netflix-discovery-server
 mvn package
 
 # echo "Building netflix-user"

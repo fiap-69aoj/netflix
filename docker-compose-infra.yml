@@ -32,7 +32,7 @@ services:
       context: ./netflix-configuration-server/
       dockerfile: ./Dockerfile
     ports:
-      - "9092:9092"
+      - "9093:9093"
     networks:
       - netflix-custom-network
       
