@@ -4,14 +4,15 @@ services:
 
   netflix-mysql:
     container_name: netflix-mysql
-    image: mysql:5.7
+    build:
+      context: ./mysql/
+      dockerfile: ./Dockerfile
     ports:
       - "3306:3306"
     networks:
       - netflix-custom-network
     environment:
       - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=netflix-catalog
 
   netflix-kafka:
     container_name: netflix-kafka
@@ -24,7 +25,7 @@ services:
     networks:
       - netflix-custom-network
     environment:
-      - ADVERTISED_HOST=localhost
+      - ADVERTISED_HOST=netflix-kafka
 
   netflix-prometheus:
     container_name: netflix-prometheus
@@ -36,16 +37,11 @@ services:
     volumes:
     - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
     depends_on:
-    - user
-    - gateway
-
-  netflix-zipkin:
-    container_name: netflix-zipkin
-    image: openzipkin/zipkin
-    ports:
-      - "9411:9411"
-    networks:
-      - netflix-custom-network
+    - netflix-catalog
+    - netflix-user
+    - netflix-order
+    - netflix-help-desk
+    - netflix-gateway
 
   netflix-configuration-server:
     container_name: netflix-configuration-server
@@ -53,7 +49,15 @@ services:
       context: ./netflix-configuration-server/
       dockerfile: ./Dockerfile
     ports:
-      - "9092:9092"
+      - "9093:9093"
+    networks:
+      - netflix-custom-network
+
+  netflix-zipkin:
+    container_name: netflix-zipkin
+    image: openzipkin/zipkin
+    ports:
+      - "9411:9411"
     networks:
       - netflix-custom-network
 

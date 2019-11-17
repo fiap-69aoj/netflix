@@ -1,0 +1,4 @@
+CREATE DATABASE IF NOT EXISTS `netflix-catalog`;
+CREATE DATABASE IF NOT EXISTS `netflix-user`;
+CREATE DATABASE IF NOT EXISTS `netflix-order`;
+CREATE DATABASE IF NOT EXISTS `netflix-help-desk`;
